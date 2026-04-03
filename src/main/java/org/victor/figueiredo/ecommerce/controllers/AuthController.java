@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.victor.figueiredo.ecommerce.dtos.AuthenticationDTO;
+import org.victor.figueiredo.ecommerce.dtos.LoginResponseDTO;
 import org.victor.figueiredo.ecommerce.dtos.RegisterDTO;
 import org.victor.figueiredo.ecommerce.models.UserModel;
 import org.victor.figueiredo.ecommerce.repositories.UserRepository;
+import org.victor.figueiredo.ecommerce.services.TokenService;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,6 +27,9 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO dto) {
 
@@ -32,7 +37,9 @@ public class AuthController {
 
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((UserModel) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
