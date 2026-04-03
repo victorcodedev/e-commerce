@@ -1,31 +1,33 @@
 package org.victor.figueiredo.ecommerce.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.victor.figueiredo.ecommerce.dtos.ProductRequestDTO;
 import org.victor.figueiredo.ecommerce.models.ProductModel;
 import org.victor.figueiredo.ecommerce.services.ProductService;
 
-import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/products")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @RequestMapping()
+    @PostMapping()
     public ResponseEntity createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
         return ResponseEntity.ok(productService.create(productRequestDTO));
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductModel>> getProducts() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<Page<ProductModel>> getProducts(@PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(productService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
