@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.victor.figueiredo.ecommerce.dtos.ProductRequestDTO;
+import org.victor.figueiredo.ecommerce.exceptions.ResourceNotFoundException;
 import org.victor.figueiredo.ecommerce.models.ProductModel;
 import org.victor.figueiredo.ecommerce.repositories.ProductRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,7 +43,7 @@ public class ProductService {
     public ProductModel update(UUID id,ProductRequestDTO productRequestDTO) {
 
         ProductModel product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
 
         product.setName(productRequestDTO.name());
         product.setDescription(productRequestDTO.description());

@@ -1,5 +1,6 @@
 package org.victor.figueiredo.ecommerce.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping()
-    public ResponseEntity createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
+    public ResponseEntity createProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
         return ResponseEntity.ok(productService.create(productRequestDTO));
     }
 
@@ -38,7 +39,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductModel> updateProduct(@PathVariable UUID id, @RequestBody ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<ProductModel> updateProduct(@PathVariable UUID id, @RequestBody @Valid ProductRequestDTO productRequestDTO) {
         return ResponseEntity.ok(productService.update(id, productRequestDTO));
     }
 

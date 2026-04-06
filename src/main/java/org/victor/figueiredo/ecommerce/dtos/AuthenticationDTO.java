@@ -1,4 +1,13 @@
 package org.victor.figueiredo.ecommerce.dtos;
 
-public record AuthenticationDTO(String username, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record AuthenticationDTO(
+
+        @NotBlank(message = "Username é obrigatório")
+        String username,
+
+        @NotBlank(message = "Password é obrigatório")
+        String password
+) {
 }
